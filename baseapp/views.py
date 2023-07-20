@@ -3,12 +3,12 @@ from django.http import HttpResponse
 
 
 def pag_inicial(request):
-    return render(request, 'index.html')
+    return render(request, 'index')
 
 
 def contato_email(request):
-    return render(request, "contato.html")
+    return render(request, "contato")
 
 
 def reserva_pet(request):
-    return render(request, "reserva.html")
+    return render(request, "reserva")

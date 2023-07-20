@@ -8,7 +8,7 @@ from baseapp.views import reserva_pet
 
 urlpatterns = [
     path('', pag_inicial),
-    path("contato.html", contato_email),
-    path("reserva.html", reserva_pet),
+    path("contato/", contato_email),
+    path("reserva/", reserva_pet),
     path("admin/", admin.site.urls),
 ]

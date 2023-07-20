@@ -8,7 +8,7 @@
     <meta name="generator" content="Hugo 0.112.5">
     <title>Petshop Ultima</title>
 
-<link href="static/bootstrap.min.css" rel="stylesheet">
+<link href="/static/bootstrap.min.css" rel="stylesheet">
   </head>
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -97,6 +97,40 @@
 
 <main>
 
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Reserve o banho do seu Pet!</h1>
+        <p class="lead text-body-secondary">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum atque dolorum, corrupti fugit ea voluptas neque est! Recusandae maxime, voluptate possimus officiis repellat dolorem incidunt? Aperiam amet nihil illo officia.</p>
+        <p>
+          <a href="reserva/" class="btn btn-primary my-2">Faça a sua reserva</a>
+          <a href="contato/" class="btn btn-secondary my-2">Fale conosco</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-body-tertiary">
+    <div class="container">
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+            <div class="card-body">
+              <p class="card-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quos doloremque minima maxime similique iste, officiis tenetur unde consequuntur, perferendis hic ipsa itaque velit doloribus dolorem cumque ab odit deserunt deleniti?</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Visualizar</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Detalhes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </main>
 
@@ -108,7 +142,7 @@
     <p class="mb-1">Petshop Ultima School</p>
   </div>
 </footer>
-<script src="static/bootstrap.bundle.min.js"></script>
+<script src="/static/bootstrap.bundle.min.js"></script>
 
     </body>
 </html>

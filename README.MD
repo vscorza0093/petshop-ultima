@@ -21,7 +21,7 @@ A API também deve permitir a criação de uma nova reserva.
 A tag <form> é usada para criar um formulário HTML para input do usuário
 
 A tag <form> pode conter um ou mais dos seguintes elementos:
-
+```
 * <input>
 * <textarea>
 * <button>
@@ -31,7 +31,7 @@ A tag <form> pode conter um ou mais dos seguintes elementos:
 * <fieldset>
 * <label>
 * <output>
-
+```
 A tag <form> possui diversos atributos, como autocomplete, ou especificações de codificação de caracteres, nome, validação, relação entre formulário e documento.
 
 Um atributo muito importante é o _method_ que servirá para especificar o método HTTP que será utilizado ao enviar os dados do formulário.

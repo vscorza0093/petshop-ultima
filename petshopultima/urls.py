@@ -1,14 +1,11 @@
 from django.contrib import admin
 from django.urls import path
 
-from baseapp.views import pag_inicial
-from baseapp.views import contato_email
-from baseapp.views import reserva_pet
-
+from baseapp.views import index, contato, reserva
 
 urlpatterns = [
-    path('', pag_inicial),
-    path("contato/", contato_email),
-    path("reserva/", reserva_pet),
+    path('', index),
+    path("contato/", contato),
+    path("reserva/", reserva),
     path("admin/", admin.site.urls),
 ]

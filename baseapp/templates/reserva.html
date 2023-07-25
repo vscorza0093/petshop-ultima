@@ -1,4 +1,5 @@
 <!doctype html>
+{% load bootstrap5 %}
 <html lang="en" data-bs-theme="auto">
   <head><script src="../assets/js/color-modes.js"></script>
     <meta charset="utf-8">
@@ -108,16 +109,9 @@
     <section class="container">
         <div class="row">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <form action="" method="post">
+                <form action="" method="post" novalidate>
                   {% csrf_token %}
-                    <div class="mb-3">
-                        <label form="id_name">Seu nome</label>
-                        <input type="text" class="form-control" id="id_name" name="name">
-                    </div>
-                    <div class="mb-3">
-                        <label form="id_email">Seu Email</label>
-                        <input type="email" class="form-control" id="id_email" name="email">
-                    </div>
+                  {% bootstrap_form form %}
                     <div class="mb-3">
                       <label form="id_name">Nome do pet</label>
                       <input type="text" class="form-control" id="id_name" name="name">
@@ -130,10 +124,6 @@
                             <option value="medium">Médio</option>
                             <option value="large">Grande</option>
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label form="id_observations">Observações</label>
-                        <textarea class="form-control" name="id_observations" id="id_observations" cols="30" rows="10"></textarea>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Enviar</button>

@@ -120,6 +120,105 @@ O sistema de Forms é composto da seguinte forma:
 Bibliografia
 ```
 
+Então, para usar o Django Forms nesta página de contato, vamos precisar criar um arquivo chamado forms.py na mesma pasta onde está o views.py, com o seguinte conteúdo:
+
+```Python
+from django import forms
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
+```
+
+A classe ContactForm vai herdar dados de uma classe chamada forms.Form, e com isso ela vai ganhar algumas características do sistema de Forms. Em seguida, vamos declarar quais os campos esse formulário terá:
+
+```
+nome: vai ser do tipo CharField, que corresponde a um campo de texto simples no formulário e irá se transformar num input text.
+
+email: vai ser do tipo EmailField, que corresponde a um campo de texto que valida se valor informado se parece com um email, e no html vai se transformar num input email
+
+menssage: vai ser do tipo CharField também, porém, como queremos que seja um campo de texto maior (textarea), precisaremos indicar o widget desse campo.
+```
+
+Com nossa classe criada e seus campos definidos, vamos testá-la primeiramente no terminal do Django (terminal do Python com o ambiente Django carregado). Para isso, vamos parar o comando runserver e rodar o seguinte comando: `python manage.py shell`
+
+Agora estamos no terminal do Python, mas com o ambiente Django carregado, pois assim conseguimos trabalhar melhor. Vamos importar a nossa classe criada e então criar um dicionário simulando o que seriam os dados enviados do formulário e por fim vamos criar nosso form.
+
+
+Quando chamamos o form.is_valid(), estamos verificando se todos os campos são válidos. Neste caso, ele retornou True, pois todos os campos foram preenchidos e o campo email realmente tinha um e-mail válido. Em seguida usamos o as_p() para gerar o HTML desse formulário em forma de tags p.
+
+Na prática, o form vai pegar cada campo, colocar uma tag p e em seguida gerar o HTML do label e do input. É possível verificar que foram criados os tipos corretos nos campos nome e email, e o campo mensagem virou um textarea, pois tínhamos mencionado que o widget dele seria justamente um textarea. Além disso, os campos estão preenchidos com os valores informados no dicionário dados.
+
+No exemplo acima, o campo email não tem um e-mail válido e o campo mensagem está vazio, portanto, é possível verificar que foi criada uma tag ul que contém uma outra tag li, e ela contém uma mensagem de erro já traduzida (afinal, no começo do projeto indicamos o idioma pt-BR).
+
+Tanto essa mensagem como a forma como os campos vão ser disponibilizados são passíveis de customizações, afinal, este HTML acima não é compatível com o Bootstrap  (em cada campo falta a class=”form-control”, além de outros detalhes).
+
+Assim, para facilitar nosso trabalho, vamos utilizar uma biblioteca chamada: django-bootstrap-v5. Para instalá-la basta rodar no terminal: `pip install django-bootstrap-v5`
+
+```python
+from baseapp.forms import ContactForm
+
+def contato(request):
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+    context = {
+        'telefone': '(99) 99999-9999',
+        'responsavel': 'Maria da Silva',
+        'form': form
+    }
+    return render(request, "contato.html", context)
+```
+
+No código acima, verificamos se o método acessado é o GET (criamos o form vazio) ou o POST (criamos o form com os dados do request.POST). Por fim, precisamos colocar este form no contexto para que fique disponível no template.
+
+Vamos agora alterar o contato.html para gerar esse form. Primeiro vamos adicionar uma templatetag no início dele:
+```
+{% load bootstrap5 %}
+```
+
+Assim como em Python, o sistema de templates do Django também tem templatetags e filtros nativos, isto é, não é necessário importá-los. Além disso, é possível criar novos templatetags e filtros (como é o caso deste App django bootstrap v5) e carregá-los com a opção load. Com a biblioteca boostrap5 carregada, agora temos acesso a algumas templatetags extras. Vamos usar uma delas para renderizar o form no formato que o Bootstrap precisa:
+
+```
+<main>
+  <h1>Fale Conosco</h1>
+  <p> 
+    Envie uma mensagem através do formulário abaixo ou ligue para o telefone {{ telefone }}. Falar com a responsável {{ responsavel|upper }}
+  </p>
+  <form action="" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+
+    <hr>
+    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+  </form>
+</main>
+```
+
+No trecho acima, substituímos a escrita manual dos campos do formulário pela chamada da nova templatetag bootstrap_form. Templatetags podem receber parâmetros como se fossem funções Python, assim, esta recebe o form, que é a variável que foi definida no contexto no arquivo views.py e é um ContatoForm. 
+
+Nosso formulário mudou um pouco, já que agora todos os campos estão alinhados verticalmente, mas é possível ajustar essa posição caso necessário.  De toda forma, o HTML foi gerado conforme indicado pelo Bootstrap, sem a necessidade de escrever um código longo. Agora, vamos  submeter a página para verificar se as mensagens de erro são exibidas.
+
+Quando utilizarmos o método POST, o código entrará no else e executará se o form estiver válido (tudo preenchido corretamente). Vamos colocar a variável sucesso como True, e ela será adicionada no contexto também. Agora vamos alterar o contato.html para que, caso essa variável sucesso seja True, uma mensagem de sucesso seja exibida:
+
+```
+  {% if success %}
+  <p class="alert alert-success">Mensagem enviada com sucesso!</p>
+  {% endif %}
+```
+
+No código acima vemos mais uma templatetag, o IF. Ela tem o mesmo comportamento de um IF em Python: será repassada uma condição, e caso seja confirmada, o HTML entre o {% if sucesso %} e o  {% endif %} será colocado na página que será acessada pelo usuário. É como se fosse um print da página: se confirmada pelo IF, a tag p com class=”alert alert-success” será exibida. A página será carregada normalmente ao ser acessada pela primeira vez, e após o preenchimento correto dos dados, a mensagem de sucesso aparecerá.
+
+Assim, no trecho de código do views.py onde colocamos sucesso = True, poderíamos fazer alguma outra lógica como salvar os dados no banco ou enviar um e-mail.
+
+
+
+
+
+
 
 
 

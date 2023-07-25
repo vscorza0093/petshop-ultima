@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from baseapp.forms import ContactForm
+from baseapp.forms import PetShowerForm
 
 
 def index(request):
@@ -7,16 +8,28 @@ def index(request):
 
 
 def contato(request):
+    success = False
+    if request.method == 'GET':
+        form = ContactForm()
+    else:
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            success = True
     context = {
         'telefone': '(99) 99999-9999',
         'responsavel': 'Maria da Silva',
+        'form': form,
+        'success': success
     }
-    if request.method == 'POST':
-        print(f"Nome: {request.POST['name']}")
-        print(f"Email: {request.POST['email']}")
-        print(f"Mensagem: {request.POST['message']}")
     return render(request, "contato.html", context)
 
 
 def reserva(request):
-    return render(request, "reserva.html")
+    if request.method == 'GET':
+        form = PetShowerForm()
+    else:
+        form = PetShowerForm(request.POST)
+    context = {
+        'form': form,
+    }
+    return render(request, "reserva.html", context)

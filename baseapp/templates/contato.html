@@ -97,19 +97,27 @@
 </header>
 
 <main>
-  <h1>Fale Conosco</h1>
-  <p> 
-    Envie uma mensagem através do formulário abaixo ou ligue para o telefone {{ telefone }}. Falar com a responsável {{ responsavel|upper }}
-  </p>
+  <section class="py-5 text-center container">
+    <h1 class="fw-light">Fale Conosco</h1>
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <p class="lead text-body-secondary"> 
+          Envie uma mensagem através do formulário abaixo ou ligue para o telefone {{ telefone }}. Falar com a responsável {{ responsavel|upper }}
+        </p>
+    </div>
+  </section>
   {% if success %}
   <p class="alert alert-success">Mensagem enviada com sucesso!</p>
   {% endif %}
-  <form action="" method="post" novalidate>
-    {% csrf_token %}
-    {% bootstrap_form form %}
-
-    <hr>
-    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+  <div class="row">
+    <div class="col-lg-6 col-md-8 mx-auto">
+    <form action="" method="post" novalidate>
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+      </div>
+    </div>
+  </div>
   </form>
 </main>
 

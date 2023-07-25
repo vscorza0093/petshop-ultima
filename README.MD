@@ -215,6 +215,80 @@ No código acima vemos mais uma templatetag, o IF. Ela tem o mesmo comportamento
 Assim, no trecho de código do views.py onde colocamos sucesso = True, poderíamos fazer alguma outra lógica como salvar os dados no banco ou enviar um e-mail.
 
 
+### ORM (Object-relational Mapper) e Migrate
+
+ORM no Django Model é uma abstração que permite que classes Python representem tabelas no banco de dados. Estas classes devem ser escritas no arquivo `models.py` de cada módulo. Sabemos que alguns módulos já estão na configuração `INSTALLED_APPS` do arquivo `settings.py`, ou seja, já tem suas tabelas para serem criadas. Então vem a pergunta: como fazer o django criar essas tabelas e como indicar que vamos utilizar o sqlite3?
+
+Isso se responde na variável DATABASES, do mesmo arquivo `settings.py`.
+
+Na configuração padrão, está indicado que iremos utilizar o sqlite3 e o nome do arquivo do nosso banco de dados será: `db.sqlite3`.
+
+Nem todo módulo precisa ter modelos (tabelas), mas é comum tê-los. Por isso, para que o Django crie as possíveis tabelas das aplicações, precisamos rodar um novo comando, conhecido como `migrate`.
+
+Utilizaremos o comando da seguinte forma `python .\manage.py migrate`. E após a conclusão da execução, um novo diretório, chamado `migrations` será criado no nosso módulo.
+
+O Django Models, além de permitir que uma classe Python vire uma tabela e que manipulações sejam realizadas nos dados sem usar SQL diretamente, também permite que se faça um versionamento do banco de dados através de migrações (migrations).
+
+As migrações são atualizações na estrutura do banco de dados. Imagine que criamos uma funcionalidade que exigia ter uma tabela com cinco campos, e alguns meses depois, percebemos que seria útil ter um novo campo. Com isso, precisariamos fazer uma atualização na tabela. No sistema de migrações do Django, podemos fazer a alteração na classe Python que representa a tabela, adicionando o campo extra, em seguida rodamos alguns comandos para gerar automaticamente um código Python que irá adicionar esse campo na tabela.
+
+Com o DBeaver poderemos visualizar as tabelas que foram criadas em nosso banco de dados. 
+
+As tabelas que começam com o prefixo `auth` são as tabelas do sistema de usuários que já vem com o Django.
+
+Sobre as outras tabelas:
+
+```
+* django_admin_log: controla as atividades dos usuários no sistema administrativo do Django
+* django_content_type: armazena informações sobre todas as tabelas e classes Python (models) da aplicação
+* django_migrations: armazena as migrações que foram efetivamente executadas no banco de dados. Se algum colega de projeto gerar novas migrações (criar ou modificar tabelas), ao rodar o `migrate`o Django irá pegar apenas as migrações ainda não executadas
+* django_session: controla a sessão de usuários (armazena dados gerais sobre o acesso dos usuários)
+```
+
+Para criar nossas próprias tabelas, precisamos, primeiro, identificar o que faz sentido ser armazenado no banco de dados. No nosso projeto temos uma página de contato que não realiza nenhuma ação quando um usuário envia uma mensagem. Vamos corrigir isto, inserindo um novo código dentro do arquivo `models.py`, que está dentro da nossa pasta `baseapp`
+
+```python
+from django.db import models
+
+class Contact(models.Model):
+  name = models.CharField(max_length=50)
+  email = models.EmailField(max_length=75)
+  date = models.DateTimeField(auto_now_add=True)
+  message = models.TextField()
+
+```
+
+No código acima, criamos uma classe chamada Contact que herda de uma outra classe `models.Model`. Assim como quando foi criado um form, nós indicamos quais os campos que queremos, a diferença aqui é que esses campos irão se transformar em colunas no nosso banco de dados.
+
+Com nossa classe criada, agora precisamos criar uma migração, que é um arquivo Python que irá indicar o que vai ser criado no banco de dados. Felizmente esse arquivo é gerado de forma automática, executando o seguinte comando: `python .\manage.py makemigrations`
+
+O comando `makemigrations` é responsável por verificar se o banco de dados está compatível com nosos modelos, ou seja, identificar se os nossos modelos (classes que herdam de models.Model) estão com os mesmos campos e opções correspondentes ao banco de dados atual. Caso haja alguma diferença (novas classes/modelos, novos campos ou alterações nos campos), esse comando vai identificá-la e criar um arquivo Python com uma rotina que faz a alteração no banco de dados: create table, alter table, drop column, entre outros comandos.
+
+Um novo arquivo foi criado, e neste arquivo é indicada uma migração de criação de modelo, que na prática vai criar a tabela indicada. Agora iremos rodar o comando que efetiva as migrações, o `migrate`. Ele identifica quais migrações ainda não foram executadas: `python .\manage.py migrate`
+
+```
+Operations to perform:
+  Apply all migrations: admin, auth, baseapp, contenttypes, sessions
+Running migrations:
+  Applying baseapp.0001_initial... OK
+```
+
+Agora podemos visualizar, dentro do DBeaver, a nova tabela criada.
+
+É possível perceber que o nome da tabela ficou baseapp_contact. Esse é o padrão do Django, usar o nome do módulo com o nome do modelo. Entretanto, existe uma coluna chamada `id` que não foi declarada na hora que criamos nosso modelo, uma vez que o Django exige uma coluna que seja a chave primária da tabela. Com isso, se não for definida uma coluna para a chave primária, o Django cria automaticamente esse campo `id`.
+
+
+### Operações de Persistência
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,10 +1,33 @@
 from django.shortcuts import render
 from baseapp.forms import ContactForm
 from baseapp.forms import PetShowerForm
+import requests
 
 
 def index(request):
-    return render(request, 'index.html')
+    url = 'https://dog.ceo/api/breeds/image/random'
+    response = requests.get(url)
+    data = response.json()
+
+    i = 30
+    dog_race = ""
+    for letter in data['message']:
+        if data['message'][i] != '/':
+            dog_race += data['message'][i]
+            i += 1
+        else:
+            break
+
+    print(dog_race)
+    if request.method == 'GET':
+        print("get")
+    else:
+        print("not get")
+    context = {
+        'dog': data['message'],
+        'race': dog_race
+    }
+    return render(request, 'index.html', context)
 
 
 def contato(request):

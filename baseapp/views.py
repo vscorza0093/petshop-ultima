@@ -18,11 +18,6 @@ def index(request):
         else:
             break
 
-    print(dog_race)
-    if request.method == 'GET':
-        print("get")
-    else:
-        print("not get")
     context = {
         'dog': data['message'],
         'race': dog_race

@@ -279,6 +279,91 @@ Agora podemos visualizar, dentro do DBeaver, a nova tabela criada.
 
 ### Operações de Persistência
 
+Para testarmos o nosso modelo criado anteriormente, vamos executar o comando shell do Django, que faz com que um terminal do Python abra com o ambiente Django disponível: `python .\manage.py shell`
+
+A partir deste comando, abrimos o ambiente de shell do Django, onde poderemos criar uma instância de qualquer modelo que criamos anteriormente no arquivo `models.py` e salvá-la no banco de dados.
+
+```python
+
+In[1]: from base.models import Contact
+In[2]: contact = Contact()
+In[3]: contact.name = "Vinicius"
+In[4]: contact.email = "vinicius@email.com"
+In[5]: contact.message = "Mensagem de teste"
+In[6]: contact.save()
+
+```
+
+No código acima importamos a classe contato e criamos uma instância (um registro do banco de dados ainda não salvo). Após utilizarmos a função `save()` que está definida na classe `Model` que está sendo herdada pela nossa classe Contact, os dados inseridos na instância criada são persistidos no banco de dados. A função save é responsável por gerar o comando `Insert` correspondente a este registro e, assim, efetivar o salvamento da informação no banco de dados. 
+
+Enquanto não finalizarmos a sessão do Shell Django, poderemos fazer alterações nos dados inseridos no banco de dados, utilizando a instância criada anteriormente. O ORM do Django é inteligente para perceber que estamos querendo atualizar informações e no momento em que utilizarmos a função `save()`, o Django não irá mais realizar um `Insert` no banco de dados, mas sim um `Update`, atualizando nosso registro salvo anteriormente. 
+
+Uma outra forma de salvar um dado usando nossos modelos é através de uma função chamada `create`, presente no atributo `objects` da classe Model, herdada pelas nossas classes modelos.
+
+```python
+
+In[1]: from base.models import Contact
+In[2]: contact = Contact.objects.create(name="Vinicius", email="vinicius@email.com", message="Mensagem de teste")
+
+```
+
+Utilizando a função `create()` da propriedade objects, uma nova informação será sempre salva, um novo id será criado no banco de dados. Essa é a principal diferença de `create()` para `save()`.
+
+Além de salvar informações, o ORM do Django permite consultar dados. Para isso devemos utilizar a função Get da propriedade `objects`.
+
+```python
+
+In[1]: from base.models import Contact
+In[2]: contact1 = Contact.objects.get(id=1)
+In[3]: contact1.name
+'Vinicius'
+In[4]: contact1.email
+'vinicius@email.com'
+
+```
+
+Essa função Get recebe o nome do campo na tabela e o valor que se deseja consultar. Na prática, um comando SQL `Select` será gerado para fazer a consulta no banco de dados. No entanto, a função irá se limitar a retornar apenas um registro, e assim os filtros utilizados devem garantir que apenas uma informação seja retornada. Caso desejemos consultar todos os dados de determinada tabela, devemos seguir da seguinte forma:
+
+```python
+
+In[1]: from base.models import Contact
+In[2]: contacts = Contact.objects.all()
+In[3]: for contact in contacts:
+          print(f"Name:{contact.name}\nMessage:{contact.message}")
+
+'Name:Vinicius'
+'Message:Nothing to say'
+'Name:Stella'
+'Message:Somos o Petshop mais fofo do mundo'
+
+```
+
+A função `all()` faz uma consulta para retornar todos os dados da tabela e é possível fazer um loop for em cima do resultado para manipular todas as informações vindas do banco de dados. Desta forma, podemos navegar sobre os registros retornados e, por exemplo, imprimir o nome e email.
+
+É possível criar quaisquer consultas no banco de dados utilizando o ORM do Django, sem precisar escrever o código SQL correspondente.
+
+
+
+## Modelform
+
+Agora que já sabemos como funciona um modelo do Django, vamos fazer com que nosso formulário de contato salve efetivamente a mensaegm de contato no banco de dados. Para isso, vamos ajustar o arquivo `views.py`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
